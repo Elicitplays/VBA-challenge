@@ -1,12 +1,13 @@
 Attribute VB_Name = "Module1"
 
+
 Sub test()
 
 
     Dim Summary_Table_Row As Integer
     Summary_Table_Row = 2
 
-    Dim opening As Integer
+    Dim opening As Long
     opening = 2
 
     Dim first_open As Boolean
@@ -22,8 +23,10 @@ For Each ws In Worksheets
     Summary_Table_Row = 2
     opening = 2
     first_open = True
+    
+    LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
 
-        For i = 2 To 22771
+        For i = 2 To LastRow
 
             If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
     
@@ -42,7 +45,7 @@ For Each ws In Worksheets
                 
                 Yearly_change = ws.Cells(i, 6).Value - ws.Cells(opening, 3).Value
       
-                Percent_change = (ws.Cells(opening, 3).Value - ws.Cells(i, 6).Value) / (ws.Cells(i, 6).Value)
+                Percent_change = (ws.Cells(i, 6).Value - ws.Cells(opening, 3).Value) / (ws.Cells(opening, 3).Value)
 
                 ' Add to the volume Total
                 Volume_Total = Volume_Total + ws.Cells(i, 7).Value
@@ -66,6 +69,8 @@ For Each ws In Worksheets
                 Volume_Total = 0
       
                 first_open = False
+                
+                opening = opening + 1
 
 
             Else
@@ -79,10 +84,16 @@ For Each ws In Worksheets
 
         Next i
         
+        
+        ws.Range("Q2").Value = Application.WorksheetFunction.Max(ws.Range("l:l"))
+        ws.Range("Q3").Value = Application.WorksheetFunction.Min(ws.Range("l:l"))
+        ws.Range("Q4").Value = Application.WorksheetFunction.Max(ws.Range("m:m"))
+        
         'Debug.Print ("this works once")
         
     Next ws
 
 End Sub
+
 
 
